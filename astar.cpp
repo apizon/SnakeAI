@@ -5,9 +5,9 @@
 
 using namespace sf;
 
-Astar::Node Astar::graph[G_WIDTH][G_HEIGHT] = {};
-Vector2i Astar::from = Vector2i(0, 0);
-Vector2i Astar::to = Vector2i(0, 0);
+Vector2i Astar::from;
+Vector2i Astar::to;
+Astar::Node Astar::graph[G_WIDTH][G_HEIGHT];
 
 void Astar::init() {
 	for (int i = 0; i < G_WIDTH; i++) {

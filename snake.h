@@ -17,8 +17,8 @@ class Snake {
 		sf::Color color;
 		
 	public:
-		Snake(int num = 1);
-		Snake(Snake* s);
+		Snake();
+		Snake(Snake& s);
 		void spawn();
 		void move(int dir);
 		bool followPath();

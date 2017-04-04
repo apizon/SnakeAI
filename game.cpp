@@ -7,26 +7,19 @@
 
 using namespace sf;
 
-Game::Game(int nbPlayer) : a() {
-	snakeAlive = nbPlayer;
-
-	snek.resize(nbPlayer);
-	for (int i = 0; i < snek.size(); i++) {
-		snek[i] = new Snake(i);
-	}
-
+Game::Game() {
+	snakeAlive = NB_PLAYER;
 	generateObstacles();
-	a.spawn(obstacles);
-}
 
-Game::~Game() {
-	for (int i = 0; i < snek.size(); i++) {
-		delete snek[i];
+	Astar::init();
+
+	for (int i = 0; i < NB_APPLE; i++) {
+		apple[i].spawn(obstacles, apple);
+		Astar::setTo(apple[0].getPosition());
 	}
 }
 
 void Game::play(RenderWindow& win) {
-	Astar::init();
 
 	Event event;
 	while (win.isOpen()) {
@@ -34,7 +27,7 @@ void Game::play(RenderWindow& win) {
 			if (event.type == Event::Closed)
 				win.close();
 			if (event.type == Event::MouseWheelScrolled) {
-				gui.scroll(Mouse::getPosition(win), event.mouseWheelScroll.delta);
+				gui.scroll(Mouse::getPosition(win), (int)event.mouseWheelScroll.delta);
 			}
 		}
 
@@ -42,28 +35,27 @@ void Game::play(RenderWindow& win) {
 			win.close();
 
 		/*if (Keyboard::isKeyPressed(Keyboard::Left))
-			snek[0]->move(LEFT);
+			snek[0].move(LEFT);
 		else if (Keyboard::isKeyPressed(Keyboard::Right))
-			snek[0]->move(RIGHT);
+			snek[0].move(RIGHT);
 		else if (Keyboard::isKeyPressed(Keyboard::Up))
-			snek[0]->move(UP);
+			snek[0].move(UP);
 		else if (Keyboard::isKeyPressed(Keyboard::Down))
-			snek[0]->move(DOWN);
+			snek[0].move(DOWN);
 		else
-			snek[0]->move(NONE);*/
+			snek[0].move(NONE);*/
 
-		Astar::setTo(a.getPosition());
 		Astar::softReset(obstacles);
-		for (auto s : snek) {
-			if (!s->isDead()) {
-				Astar::setFrom(s->getHeadPosition());
-				s->setPath(Astar::findPath());
+		for (int i = 0; i < NB_PLAYER; i++) {
+			if (!snek[i].isDead()) {
+				Astar::setFrom(snek[i].getHeadPosition());
+				snek[i].setPath(Astar::findPath());
 
-				if (!s->followPath())
-					stall(s);
+				if (!snek[i].followPath())
+					stall(snek[i]);
 
 				generateObstacles();
-				if (collide(s)) {
+				if (collide(snek[i])) {
 					generateObstacles();
 					snakeAlive--;
 					if (snakeAlive == 0)
@@ -72,45 +64,48 @@ void Game::play(RenderWindow& win) {
 			}
 		}
 
-		gui.display(win, snek, a);
+		gui.display(win, snek, apple);
 	}
 }
 
-bool Game::collide(Snake* s) {
-	if (!s->isDead()) {
-		if (s->isOutOfBounds() || std::count(obstacles.begin(), obstacles.end(), s->getHeadPosition()) >= 2) {
-			s->die();
+bool Game::collide(Snake& s) {
+	if (!s.isDead()) {
+		if (s.isOutOfBounds() || std::count(obstacles.begin(), obstacles.end(), s.getHeadPosition()) >= 2) {
+			s.die();
 			return true;
 		}
 
-		if (s->getHeadPosition() == a.getPosition()) {
-			s->eat();
-			a.spawn(obstacles);
+		for (int i = 0; i < NB_APPLE; i++) {
+			if (s.getHeadPosition() == apple[i].getPosition()) {
+				s.eat();
+				apple[i].spawn(obstacles, apple);
+				Astar::setTo(apple[0].getPosition());
+			}
 		}
 	}
 	return false;
 }
 
-void Game::stall(Snake* s) {
-	Vector2i sHead = s->getHeadPosition();
+void Game::stall(Snake& s) {
+	Vector2i sHead = s.getHeadPosition();
 	if (sHead.x < G_WIDTH - 1 && std::count(obstacles.begin(), obstacles.end(), sHead + Vector2i(1, 0)) == 0)
-		s->move(RIGHT);
+		s.move(RIGHT);
 	else if (sHead.x > 0 && std::count(obstacles.begin(), obstacles.end(), sHead + Vector2i(-1, 0)) == 0)
-		s->move(LEFT);
+		s.move(LEFT);
 	else if (sHead.y > 0 && std::count(obstacles.begin(), obstacles.end(), sHead + Vector2i(0, -1)) == 0)
-		s->move(UP);
+		s.move(UP);
 	else if (sHead.y < G_HEIGHT - 1 && std::count(obstacles.begin(), obstacles.end(), sHead + Vector2i(0, 1)) == 0)
-		s->move(DOWN);
+		s.move(DOWN);
 	else
-		s->move(NONE);
+		s.move(NONE);
 	
 }
 
 void Game::generateObstacles() {
 	obstacles.clear();
-	for (auto s : snek) {
-		if (!s->isDead()) {
-			std::vector<Vector2i> snekPos = s->getPosition();
+	for (int i = 0; i < NB_PLAYER; i++) {
+		if (!snek[i].isDead()) {
+			std::vector<Vector2i> snekPos = snek[i].getPosition();
 			obstacles.reserve(obstacles.size() + snekPos.size());
 			obstacles.insert(obstacles.end(), snekPos.begin(), snekPos.end());
 		}
@@ -124,7 +119,7 @@ void Game::gameOver(sf::RenderWindow& win) {
 			if (event.type == Event::Closed)
 				win.close();
 			if (event.type == Event::MouseWheelScrolled) {
-				gui.scrollGameOver(Mouse::getPosition(win), event.mouseWheelScroll.delta);
+				gui.scrollGameOver(Mouse::getPosition(win), (int)event.mouseWheelScroll.delta);
 			}
 		}
 

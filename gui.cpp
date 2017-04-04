@@ -74,19 +74,19 @@ void Gui::scrollGameOver(Vector2i& mousePos, int val) {
 	}
 }
 
-void Gui::sortByScore(std::vector<Snake*>& snek) {
-	for (int i = 0; i < snek.size(); i++) {
-		scoreMap.emplace(snek[i]->getScore(), i);
+void Gui::sortByScore(Snake snek[NB_PLAYER]) {
+	for (int i = 0; i < NB_PLAYER; i++) {
+		scoreMap.emplace(snek[i].getScore(), i);
 	}
 }
 
-void Gui::display(RenderWindow& win, std::vector<Snake*>& snek, Apple& a) {
+void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE]) {
 	sortByScore(snek);
 
 	win.clear();
 
-	if (scrollVal < 6 * W_HEIGHT / 7 - (int)(W_HEIGHT / 12 * (snek.size() + 1)))
-		scrollVal = 6 * W_HEIGHT / 7 - (int)(W_HEIGHT / 12 * (snek.size() + 1));
+	if (scrollVal < 6 * W_HEIGHT / 7 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1)))
+		scrollVal = 6 * W_HEIGHT / 7 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1));
 
 	int i = 0;
 	for (auto it = scoreMap.rbegin(); it != scoreMap.rend(); ++it) {
@@ -104,12 +104,12 @@ void Gui::display(RenderWindow& win, std::vector<Snake*>& snek, Apple& a) {
 			pscore = std::to_string(it->first);
 
 		score.setString("P" + pnum + " : " + pscore);
-		score.setFillColor(snek[it->second]->getColor());
+		score.setFillColor(snek[it->second].getColor());
 		score.setPosition(score.getPosition().x, (float)(W_HEIGHT / 7 + scrollVal + i * W_HEIGHT / 12));
 		win.draw(score);
 
-		if (!snek[it->second]->isDead())
-			snek[it->second]->display(win);
+		if (!snek[it->second].isDead())
+			snek[it->second].display(win);
 
 		i++;
 	}
@@ -119,17 +119,19 @@ void Gui::display(RenderWindow& win, std::vector<Snake*>& snek, Apple& a) {
 	win.draw(vert_bar);
 	win.draw(horiz_bar);
 	win.draw(title_score);
-	a.display(win);
+	for (int i = 0; i < NB_APPLE; i++) {
+		apple[i].display(win);
+	}
 	win.display();
 }
 
-void Gui::displayGameOver(sf::RenderWindow& win, std::vector<Snake*>& snek) {
+void Gui::displayGameOver(sf::RenderWindow& win, Snake snek[NB_PLAYER]) {
 	sortByScore(snek);
 
 	win.clear();
 
-	if (scrollGameOverVal < 3 * W_HEIGHT / 4 - (int)(W_HEIGHT / 12 * (snek.size() + 1)))
-		scrollGameOverVal = 3 * W_HEIGHT / 4 - (int)(W_HEIGHT / 12 * (snek.size() + 1));
+	if (scrollGameOverVal < 3 * W_HEIGHT / 4 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1)))
+		scrollGameOverVal = 3 * W_HEIGHT / 4 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1));
 
 	int i = 0;
 	for (auto it = scoreMap.rbegin(); it != scoreMap.rend(); ++it) {
@@ -147,7 +149,7 @@ void Gui::displayGameOver(sf::RenderWindow& win, std::vector<Snake*>& snek) {
 			pscore = std::to_string(it->first);
 
 		game_over_score.setString("Player " + pnum + " : " + pscore);
-		game_over_score.setFillColor(snek[it->second]->getColor());
+		game_over_score.setFillColor(snek[it->second].getColor());
 		game_over_score.setPosition(game_over_score.getPosition().x, (float)(W_HEIGHT / 4 + scrollGameOverVal + i * W_HEIGHT / 12));
 		win.draw(game_over_score);
 

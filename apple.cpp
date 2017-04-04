@@ -13,13 +13,13 @@ Apple::Apple() {
 	sprite.scale((float)S_SIZE / T_SIZE, (float)S_SIZE / T_SIZE);
 }
 
-void Apple::spawn(std::vector<Vector2i> obstacles) {
+void Apple::spawn(std::vector<Vector2i> obstacles, Apple (&apple)[NB_APPLE]) {
 	do {
 		pos.x = rand() % (G_WIDTH);
 		pos.y = rand() % (G_HEIGHT);
 		sprite.setPosition((float)pos.x*S_SIZE, (float)pos.y*S_SIZE);
 		sprite.setColor(Color(rand() % 256, rand() % 256, rand() % 256, 255));
-	} while (std::find(obstacles.begin(), obstacles.end(), Vector2i(pos.x,pos.y)) != obstacles.end());
+	} while (std::find(obstacles.begin(), obstacles.end(), pos) != obstacles.end() && std::find(std::begin(apple), std::end(apple), pos) != std::end(apple));
 }
 
 void Apple::display(RenderWindow& win) {

@@ -9,17 +9,16 @@
 class Game {
 	private:
 		int snakeAlive;
-		Apple a;
-		std::vector<Snake*> snek;
+		Apple apple[NB_APPLE];
+		Snake snek[NB_PLAYER];
 		std::vector<sf::Vector2i> obstacles;
 		Gui gui;
 	
 	public:
-		Game(int nbPlayer = 1);
-		~Game();
+		Game();
 		void play(sf::RenderWindow& win);
-		bool collide(Snake* s);
-		void stall(Snake* s);
+		bool collide(Snake& s);
+		void stall(Snake& s);
 		void generateObstacles();
 		void gameOver(sf::RenderWindow& win);
 

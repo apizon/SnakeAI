@@ -11,7 +11,7 @@ class Apple {
 
 	public:
 		Apple();
-		void spawn(std::vector<sf::Vector2i> obstacles);
+		void spawn(std::vector<sf::Vector2i> obstacles, Apple (&apple)[NB_APPLE]);
 		void display(sf::RenderWindow& win);
 		sf::Vector2i getPosition() const;
 };

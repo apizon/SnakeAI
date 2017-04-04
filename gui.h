@@ -20,9 +20,9 @@ class Gui {
 		Gui();
 		void scroll(sf::Vector2i& mousePos, int i);
 		void scrollGameOver(sf::Vector2i& mousePos, int i);
-		void sortByScore(std::vector<Snake*>& snek);
-		void display(sf::RenderWindow& win, std::vector<Snake*>& snek, Apple& a);
-		void displayGameOver(sf::RenderWindow& win, std::vector<Snake*>& snek);
+		void sortByScore(Snake snek[NB_PLAYER]);
+		void display(sf::RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE]);
+		void displayGameOver(sf::RenderWindow& win, Snake snek[NB_PLAYER]);
 };
 
 #endif

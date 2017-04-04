@@ -12,7 +12,7 @@ int main() {
 
 	srand(SEED);
 
-	Game g(15);
+	Game g;
 	g.play(win);
 	g.gameOver(win);
 

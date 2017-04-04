@@ -5,7 +5,7 @@
 
 using namespace sf;
 
-Snake::Snake(int num) {
+Snake::Snake() {
 	length = 5;
 	score = 0;
 	dead = false;
@@ -22,14 +22,14 @@ Snake::Snake(int num) {
 	sprite.scale((float)S_SIZE / T_SIZE, (float)S_SIZE / T_SIZE);
 }
 
-Snake::Snake(Snake* s) {
-	length = s->length;
-	direction = s->direction;
-	pos = s->pos;
-	path = s->path;
-	texture = s->texture;
-	sprite = s->sprite;
-	color = s->color;
+Snake::Snake(Snake& s) {
+	length = s.length;
+	direction = s.direction;
+	pos = s.pos;
+	path = s.path;
+	texture = s.texture;
+	sprite = s.sprite;
+	color = s.color;
 }
 
 void Snake::spawn() {

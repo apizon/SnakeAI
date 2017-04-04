@@ -37,7 +37,8 @@ class Astar {
 				float weight;
 				bool visited;
 		};
-		static sf::Vector2i from, to;
+		static sf::Vector2i from;
+		static sf::Vector2i to;
 		static Node graph[G_WIDTH][G_HEIGHT];
 
 	public:
