@@ -105,7 +105,7 @@ void Astar::hardReset(std::vector<Vector2i>& obstacles) {
 	}
 }
 
-void Astar::softReset(std::vector<Vector2i> obstacles) {
+void Astar::softReset(std::vector<Vector2i>& obstacles) {
 	for (int i = 0; i < G_WIDTH; i++) {
 		for (int j = 0; j < G_HEIGHT; j++) {
 			graph[i][j].setVisited(false);
@@ -122,6 +122,10 @@ void Astar::softReset(std::vector<Vector2i> obstacles) {
 	}
 }
 
+void Astar::update(Vector2i v) {
+	graph[v.x][v.y].setWeight(WEIGHT_REF);
+}
+
 
 void Astar::setTo(Vector2i t) {
 	to = t;
@@ -133,6 +137,14 @@ void Astar::setFrom(Vector2i f) {
 
 float Astar::manhattan(const sf::Vector2i& v1, const sf::Vector2i& v2) {
 	return (float)(abs(v2.x - v1.x) + abs(v2.y - v1.y));
+}
+
+float Astar::getWeight(int i, int j) {
+	return graph[i][j].getWeight();
+}
+
+float Astar::getCost(int i, int j) {
+	return graph[i][j].getEstimatedCost();
 }
 
 //Node

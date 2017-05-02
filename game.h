@@ -9,7 +9,7 @@
 class Game {
 	private:
 		int snakeAlive;
-		Apple apple[NB_APPLE];
+		Apple apple;
 		Snake snek[NB_PLAYER];
 		std::vector<sf::Vector2i> obstacles;
 		Gui gui;
@@ -21,6 +21,7 @@ class Game {
 		void stall(Snake& s);
 		void generateObstacles();
 		void gameOver(sf::RenderWindow& win);
+		void pause(sf::RenderWindow& win);
 
 };
 

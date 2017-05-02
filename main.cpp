@@ -7,7 +7,7 @@
 using namespace sf;
 
 int main() {
-	RenderWindow win(VideoMode(W_WIDTH, W_HEIGHT), "Snake");
+	RenderWindow win(VideoMode(W_WIDTH, W_HEIGHT), "Snake", Style::Fullscreen);
 	win.setFramerateLimit(FPS);
 
 	srand(SEED);

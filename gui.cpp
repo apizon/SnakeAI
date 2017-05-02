@@ -1,5 +1,6 @@
 #include <iostream>
 #include "gui.h"
+#include "astar.h"
 
 using namespace sf;
 
@@ -80,13 +81,35 @@ void Gui::sortByScore(Snake snek[NB_PLAYER]) {
 	}
 }
 
-void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE]) {
+void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple) {
 	sortByScore(snek);
 
 	win.clear();
 
-	if (scrollVal < 6 * W_HEIGHT / 7 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1)))
-		scrollVal = 6 * W_HEIGHT / 7 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1));
+	if (DISPLAY_WEIGHT || DISPLAY_COST) {
+		RectangleShape rect;
+		for (int i = 0; i < G_WIDTH; i++) {
+			for (int j = 0; j < G_HEIGHT; j++) {
+				int color = 0;
+				if(DISPLAY_WEIGHT)
+					color += 128 * (1- Astar::getWeight(i, j) / WEIGHT_REF);
+				if(DISPLAY_COST)
+					color += 128 * (1 - Astar::getCost(i, j) / WEIGHT_REF);
+
+				rect.setFillColor(Color(color, color, color));
+				rect.setPosition(i*S_SIZE, j * S_SIZE);
+				rect.setSize(Vector2f(S_SIZE, S_SIZE));
+				win.draw(rect);
+			}
+		}
+	}
+
+	if (NB_PLAYER > 10) {
+		if (scrollVal < 6 * W_HEIGHT / 7 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1)))
+			scrollVal = 6 * W_HEIGHT / 7 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1));
+	}
+	else
+		scrollVal = 0;
 
 	int i = 0;
 	for (auto it = scoreMap.rbegin(); it != scoreMap.rend(); ++it) {
@@ -119,9 +142,7 @@ void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE
 	win.draw(vert_bar);
 	win.draw(horiz_bar);
 	win.draw(title_score);
-	for (int i = 0; i < NB_APPLE; i++) {
-		apple[i].display(win);
-	}
+	apple.display(win);
 	win.display();
 }
 
@@ -130,8 +151,12 @@ void Gui::displayGameOver(sf::RenderWindow& win, Snake snek[NB_PLAYER]) {
 
 	win.clear();
 
-	if (scrollGameOverVal < 3 * W_HEIGHT / 4 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1)))
-		scrollGameOverVal = 3 * W_HEIGHT / 4 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1));
+	if (NB_PLAYER > 10) {
+		if (scrollGameOverVal < 3 * W_HEIGHT / 4 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1)))
+			scrollGameOverVal = 3 * W_HEIGHT / 4 - (int)(W_HEIGHT / 12 * (NB_PLAYER + 1));
+	}
+	else
+		scrollVal = 0;
 
 	int i = 0;
 	for (auto it = scoreMap.rbegin(); it != scoreMap.rend(); ++it) {

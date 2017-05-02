@@ -25,8 +25,8 @@ class Astar {
 				bool isVisited() const;
 
 				class Comparator {
-				public:
-					bool operator()(const Node* a, const Node* b);
+					public:
+						bool operator()(const Node* a, const Node* b);
 				};
 
 			private:
@@ -37,6 +37,7 @@ class Astar {
 				float weight;
 				bool visited;
 		};
+
 		static sf::Vector2i from;
 		static sf::Vector2i to;
 		static Node graph[G_WIDTH][G_HEIGHT];
@@ -45,14 +46,13 @@ class Astar {
 		static void init();
 		static std::vector<sf::Vector2i> findPath();
 		static void hardReset(std::vector<sf::Vector2i>& obstacles);
-		static void softReset(std::vector<sf::Vector2i> obstacles);
+		static void softReset(std::vector<sf::Vector2i>& obstacles);
+		static void update(sf::Vector2i v);
 		static void setTo(sf::Vector2i t);
 		static void setFrom(sf::Vector2i f);
 		static float manhattan(const sf::Vector2i& v1, const sf::Vector2i& v2);
-
-	
-
-
+		static float getWeight(int i, int j);
+		static float getCost(int i, int j);
 };
 
 #endif

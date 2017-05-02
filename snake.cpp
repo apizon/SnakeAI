@@ -13,7 +13,10 @@ Snake::Snake() {
 	pos.resize(length);
 	spawn();	
 
-	color = Color(rand() % 256, rand() % 256, rand() % 256, 255);
+	if (NB_PLAYER == 1)
+		color = Color(255, 255, 255);
+	else
+		color = Color(rand() % 256, rand() % 256, rand() % 256, 255);
 	texture.loadFromFile(T_SNAKE);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 0, T_SIZE, T_SIZE));
@@ -45,14 +48,14 @@ void Snake::spawn() {
 
 	for (int i = 1; i < length; i++) {
 		if (direction == LEFT || direction == RIGHT)
-			pos[i].x = pos[0].x + i * direction;
+			pos[i].x = pos[0].x - i * direction;
 		else
 			pos[i].x = pos[0].x;
 
 		if (direction == UP || direction == DOWN)
-			pos[i].x = pos[0].y + i * direction / 2;
+			pos[i].y = pos[0].y + i * direction / 2;
 		else
-			pos[i].x = pos[0].y;
+			pos[i].y = pos[0].y;
 	}
 }
 

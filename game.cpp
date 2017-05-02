@@ -13,10 +13,8 @@ Game::Game() {
 
 	Astar::init();
 
-	for (int i = 0; i < NB_APPLE; i++) {
-		apple[i].spawn(obstacles, apple);
-		Astar::setTo(apple[0].getPosition());
-	}
+	apple.spawn(obstacles);
+	Astar::setTo(apple.getPosition());
 }
 
 void Game::play(RenderWindow& win) {
@@ -26,13 +24,16 @@ void Game::play(RenderWindow& win) {
 		while (win.pollEvent(event)) {
 			if (event.type == Event::Closed)
 				win.close();
-			if (event.type == Event::MouseWheelScrolled) {
+			else if (event.type == Event::MouseWheelScrolled) {
 				gui.scroll(Mouse::getPosition(win), (int)event.mouseWheelScroll.delta);
 			}
+			else if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::Escape)
+					win.close();
+				else if (event.key.code == Keyboard::Space)
+					pause(win);
+			}
 		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
-			win.close();
 
 		/*if (Keyboard::isKeyPressed(Keyboard::Left))
 			snek[0].move(LEFT);
@@ -45,7 +46,12 @@ void Game::play(RenderWindow& win) {
 		else
 			snek[0].move(NONE);*/
 
-		Astar::softReset(obstacles);
+		if (WEIGHT_BFS)
+			Astar::hardReset(obstacles);
+		else
+			Astar::softReset(obstacles);
+
+		generateObstacles();
 		for (int i = 0; i < NB_PLAYER; i++) {
 			if (!snek[i].isDead()) {
 				Astar::setFrom(snek[i].getHeadPosition());
@@ -54,12 +60,15 @@ void Game::play(RenderWindow& win) {
 				if (!snek[i].followPath())
 					stall(snek[i]);
 
-				generateObstacles();
+				obstacles.push_back(snek[i].getHeadPosition());
 				if (collide(snek[i])) {
 					generateObstacles();
 					snakeAlive--;
 					if (snakeAlive == 0)
 						return;
+				}
+				else {
+					Astar::update(snek[i].getHeadPosition());
 				}
 			}
 		}
@@ -75,12 +84,10 @@ bool Game::collide(Snake& s) {
 			return true;
 		}
 
-		for (int i = 0; i < NB_APPLE; i++) {
-			if (s.getHeadPosition() == apple[i].getPosition()) {
-				s.eat();
-				apple[i].spawn(obstacles, apple);
-				Astar::setTo(apple[0].getPosition());
-			}
+		if (s.getHeadPosition() == apple.getPosition()) {
+			s.eat();
+			apple.spawn(obstacles);
+			Astar::setTo(apple.getPosition());
 		}
 	}
 	return false;
@@ -106,8 +113,8 @@ void Game::generateObstacles() {
 	for (int i = 0; i < NB_PLAYER; i++) {
 		if (!snek[i].isDead()) {
 			std::vector<Vector2i> snekPos = snek[i].getPosition();
-			obstacles.reserve(obstacles.size() + snekPos.size());
-			obstacles.insert(obstacles.end(), snekPos.begin(), snekPos.end());
+			obstacles.reserve(obstacles.size() + snekPos.size() - 1);
+			obstacles.insert(obstacles.end(), snekPos.begin(), snekPos.end() - 1);
 		}
 	}
 }
@@ -127,5 +134,21 @@ void Game::gameOver(sf::RenderWindow& win) {
 			win.close();
 
 		gui.displayGameOver(win, snek);
+	}
+}
+
+void Game::pause(sf::RenderWindow &win) {
+	Event event;
+	while (win.isOpen()) {
+		while (win.pollEvent(event)) {
+			if (event.type == Event::Closed)
+				win.close();
+			else if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::Escape)
+					win.close();
+				else if (event.key.code == Keyboard::Space)
+					return;
+			}
+		}
 	}
 }
