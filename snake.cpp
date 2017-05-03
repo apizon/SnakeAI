@@ -14,7 +14,7 @@ Snake::Snake() {
 	spawn();	
 
 	if (NB_PLAYER == 1)
-		color = Color(255, 255, 255);
+		color = Color::White;
 	else
 		color = Color(rand() % 256, rand() % 256, rand() % 256, 255);
 	texture.loadFromFile(T_SNAKE);
@@ -114,6 +114,10 @@ void Snake::setPath(const std::vector<sf::Vector2i>& p) {
 	path = p;
 }
 
+void Snake::clearPath() {
+	path.clear();
+}
+
 void Snake::eat() {
 	score++;
 	pos.push_back(pos[length++-1]);
@@ -186,6 +190,16 @@ void Snake::display(RenderWindow& win) {
 	sprite.setPosition((float)pos[length-1].x * S_SIZE + S_SIZE / 2, (float)pos[length - 1].y * S_SIZE + S_SIZE / 2);
 	sprite.setTextureRect(IntRect(3*T_SIZE, 0, T_SIZE, T_SIZE));
 	win.draw(sprite);
+
+	if (DISPLAY_PATH) {
+		RectangleShape rect;
+		rect.setFillColor(Color(color.r, color.g, color.b, 32));
+		rect.setSize(Vector2f(S_SIZE, S_SIZE));
+		for (auto v : path) {
+			rect.setPosition(v.x * S_SIZE, v.y * S_SIZE);
+			win.draw(rect);
+		}
+	}
 }
 
 bool Snake::isOutOfBounds() const {
@@ -217,4 +231,8 @@ Vector2i Snake::getHeadPosition() const  {
 
 std::vector<Vector2i> Snake::getPosition() const {
 	return pos;
+}
+
+int Snake::getPathSize() const {
+	return (int)path.size();
 }

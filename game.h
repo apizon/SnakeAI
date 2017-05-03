@@ -9,7 +9,7 @@
 class Game {
 	private:
 		int snakeAlive;
-		Apple apple;
+		Apple apple[NB_APPLE];
 		Snake snek[NB_PLAYER];
 		std::vector<sf::Vector2i> obstacles;
 		Gui gui;

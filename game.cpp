@@ -13,8 +13,10 @@ Game::Game() {
 
 	Astar::init();
 
-	apple.spawn(obstacles);
-	Astar::setTo(apple.getPosition());
+	for (int i = 0; i < NB_APPLE; i++) {
+		apple[i].spawn(obstacles, apple);
+	}
+	Astar::setTo(apple[0].getPosition());
 }
 
 void Game::play(RenderWindow& win) {
@@ -55,8 +57,21 @@ void Game::play(RenderWindow& win) {
 		for (int i = 0; i < NB_PLAYER; i++) {
 			if (!snek[i].isDead()) {
 				Astar::setFrom(snek[i].getHeadPosition());
-				snek[i].setPath(Astar::findPath());
-
+				
+				if (NB_APPLE == 1) {
+					snek[i].setPath(Astar::findPath());
+				}
+				else {
+					snek[i].clearPath();
+					std::vector<Vector2i> path;
+					for (int j = 0; j < NB_APPLE; j++) {
+						Astar::setTo(apple[j].getPosition());
+						path = Astar::findPath();
+						if (!snek[i].hasPath() || snek[i].getPathSize() >= path.size())
+							snek[i].setPath(path);
+					}
+				}
+				
 				if (!snek[i].followPath())
 					stall(snek[i]);
 
@@ -84,10 +99,13 @@ bool Game::collide(Snake& s) {
 			return true;
 		}
 
-		if (s.getHeadPosition() == apple.getPosition()) {
-			s.eat();
-			apple.spawn(obstacles);
-			Astar::setTo(apple.getPosition());
+		for (int i = 0; i < NB_APPLE; i++) {
+			if (s.getHeadPosition() == apple[i].getPosition()) {
+				s.eat();
+				apple[i].spawn(obstacles, apple);
+				if (NB_APPLE == 1)
+					Astar::setTo(apple[0].getPosition());
+			}
 		}
 	}
 	return false;

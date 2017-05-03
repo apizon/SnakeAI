@@ -9,21 +9,24 @@ Apple::Apple() {
 
 	texture.loadFromFile(T_APPLE);
 	sprite.setTexture(texture);
-	sprite.setColor(Color(255, 0, 0));
+	sprite.setColor(Color::Red);
 	sprite.scale((float)S_SIZE / T_SIZE, (float)S_SIZE / T_SIZE);
 }
 
-void Apple::spawn(std::vector<Vector2i> obstacles) {
+void Apple::spawn(std::vector<Vector2i> obstacles, Apple apple[NB_APPLE]) {
 	bool occupied[G_WIDTH][G_HEIGHT] = { false };
 	for (auto v : obstacles) {
 		occupied[v.x][v.y] = true;
+	}
+	for (int i = 0; i < NB_APPLE; i++) {
+		Vector2i apos = apple[i].getPosition();
+		occupied[apos.x][apos.y] = true;
 	}
 
 	do {
 		pos.x = rand() % (G_WIDTH);
 		pos.y = rand() % (G_HEIGHT);
 		sprite.setPosition((float)pos.x*S_SIZE, (float)pos.y*S_SIZE);
-		//sprite.setColor(Color(rand() % 256, rand() % 256, rand() % 256, 255));
 	} while (occupied[pos.x][pos.y]);
 }
 

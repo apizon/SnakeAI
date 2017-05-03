@@ -23,6 +23,7 @@ class Snake {
 		void move(int dir);
 		bool followPath();
 		void setPath(const std::vector<sf::Vector2i>& p);
+		void clearPath();
 		void eat();
 		void die();
 		void display(sf::RenderWindow& win);
@@ -33,6 +34,7 @@ class Snake {
 		sf::Color getColor() const;
 		sf::Vector2i getHeadPosition() const;
 		std::vector<sf::Vector2i> getPosition() const;
+		int getPathSize() const;
 };
 
 #endif

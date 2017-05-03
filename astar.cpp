@@ -55,7 +55,10 @@ std::vector<Vector2i> Astar::findPath() {
 		std::vector<Node*> nb = current->getNeighbors();
 		for (auto n : nb) {
 			if (!n->isVisited()) {
-				n->setCost(n->getEstimatedCost(), current->getCostSoFar() + n->getWeight());
+				if(DISPLAY_COST)
+					n->setCost(n->getEstimatedCost(), current->getCostSoFar() + 1 + n->getWeight() / WEIGHT_REF);
+				else
+					n->setCost(manhattan(Vector2i(n->getVal().x, n->getVal().y), to), current->getCostSoFar() + 1 + n->getWeight() / WEIGHT_REF);
 				n->setVisited(true);
 				n->setParent(current);
 				frontier.push(n);
@@ -82,7 +85,6 @@ void Astar::hardReset(std::vector<Vector2i>& obstacles) {
 	std::queue<Node*> q;
 	for (auto v : obstacles) {
 		graph[v.x][v.y].setParent(NULL);
-		graph[v.x][v.y].setCost(manhattan(Vector2i(v.x, v.y), to), 0);
 		graph[v.x][v.y].setWeight(WEIGHT_REF);
 		graph[v.x][v.y].setVisited(true);
 		q.push(&graph[v.x][v.y]);
@@ -96,7 +98,6 @@ void Astar::hardReset(std::vector<Vector2i>& obstacles) {
 		for (auto n : nb) {
 			if (!n->isVisited()) {
 				n->setParent(NULL);
-				n->setCost(manhattan(Vector2i(n->getVal().x, n->getVal().y), to), 0);
 				n->setWeight(current->getWeight() - 1);
 				n->setVisited(true);
 				q.push(n);
@@ -110,14 +111,12 @@ void Astar::softReset(std::vector<Vector2i>& obstacles) {
 		for (int j = 0; j < G_HEIGHT; j++) {
 			graph[i][j].setVisited(false);
 			graph[i][j].setParent(NULL);
-			graph[i][j].setCost(manhattan(Vector2i(i, j), to), 0);
 			graph[i][j].setWeight(0);
 		}
 	}
 
 	for (auto v : obstacles) {
 		graph[v.x][v.y].setParent(NULL);
-		graph[v.x][v.y].setCost(manhattan(Vector2i(v.x, v.y), to), 0);
 		graph[v.x][v.y].setWeight(WEIGHT_REF);
 	}
 }
@@ -129,6 +128,13 @@ void Astar::update(Vector2i v) {
 
 void Astar::setTo(Vector2i t) {
 	to = t;
+	if (DISPLAY_COST) {
+		for (int i = 0; i < G_WIDTH; i++) {
+			for (int j = 0; j < G_HEIGHT; j++) {
+				graph[i][j].setCost(manhattan(Vector2i(i, j), to), 0);
+			}
+		}
+	}
 }
 
 void Astar::setFrom(Vector2i f) {

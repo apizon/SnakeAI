@@ -81,7 +81,7 @@ void Gui::sortByScore(Snake snek[NB_PLAYER]) {
 	}
 }
 
-void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple) {
+void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE]) {
 	sortByScore(snek);
 
 	win.clear();
@@ -92,7 +92,7 @@ void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple) {
 			for (int j = 0; j < G_HEIGHT; j++) {
 				int color = 0;
 				if(DISPLAY_WEIGHT)
-					color += 128 * (1- Astar::getWeight(i, j) / WEIGHT_REF);
+					color += 128 * (1 - Astar::getWeight(i, j) / WEIGHT_REF);
 				if(DISPLAY_COST)
 					color += 128 * (1 - Astar::getCost(i, j) / WEIGHT_REF);
 
@@ -142,7 +142,8 @@ void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple) {
 	win.draw(vert_bar);
 	win.draw(horiz_bar);
 	win.draw(title_score);
-	apple.display(win);
+	for(int i = 0; i < NB_APPLE; i++)
+		apple[i].display(win);
 	win.display();
 }
 
