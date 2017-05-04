@@ -81,19 +81,19 @@ void Gui::sortByScore(Snake snek[NB_PLAYER]) {
 	}
 }
 
-void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE]) {
+void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE], Config& config) {
 	sortByScore(snek);
 
 	win.clear();
 
-	if (DISPLAY_WEIGHT || DISPLAY_COST) {
+	if (config.isDisplayWeightOn() || config.isDisplayCostOn()) {
 		RectangleShape rect;
 		for (int i = 0; i < G_WIDTH; i++) {
 			for (int j = 0; j < G_HEIGHT; j++) {
 				int color = 0;
-				if(DISPLAY_WEIGHT)
+				if(config.isDisplayWeightOn())
 					color += 128 * (1 - Astar::getWeight(i, j) / WEIGHT_REF);
-				if(DISPLAY_COST)
+				if(config.isDisplayCostOn())
 					color += 128 * (1 - Astar::getCost(i, j) / WEIGHT_REF);
 
 				rect.setFillColor(Color(color, color, color));
@@ -132,7 +132,7 @@ void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE
 		win.draw(score);
 
 		if (!snek[it->second].isDead())
-			snek[it->second].display(win);
+			snek[it->second].display(win, config);
 
 		i++;
 	}

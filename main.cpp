@@ -8,7 +8,7 @@ using namespace sf;
 
 int main() {
 	RenderWindow win(VideoMode(W_WIDTH, W_HEIGHT), "Snake", Style::Fullscreen);
-	win.setFramerateLimit(FPS);
+	win.setKeyRepeatEnabled(true);
 
 	srand(SEED);
 

@@ -5,6 +5,7 @@
 #include "snake.h"
 #include "apple.h"
 #include "gui.h"
+#include "config.h"
 
 class Game {
 	private:
@@ -13,6 +14,7 @@ class Game {
 		Snake snek[NB_PLAYER];
 		std::vector<sf::Vector2i> obstacles;
 		Gui gui;
+		Config config;
 	
 	public:
 		Game();
@@ -21,8 +23,7 @@ class Game {
 		void stall(Snake& s);
 		void generateObstacles();
 		void gameOver(sf::RenderWindow& win);
-		void pause(sf::RenderWindow& win);
-
+		void handleEvents(sf::RenderWindow& win);
 };
 
 #endif

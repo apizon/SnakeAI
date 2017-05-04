@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include "config.h"
 
 class Snake {
 	private:
@@ -26,7 +27,7 @@ class Snake {
 		void clearPath();
 		void eat();
 		void die();
-		void display(sf::RenderWindow& win);
+		void display(sf::RenderWindow& win, Config& config);
 		bool isOutOfBounds() const;
 		bool hasPath() const;
 		int getScore() const;

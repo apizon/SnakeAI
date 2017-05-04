@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "define.h"
+#include "config.h"
 
 class Astar {
 	private:
@@ -44,11 +45,11 @@ class Astar {
 
 	public:
 		static void init();
-		static std::vector<sf::Vector2i> findPath();
+		static std::vector<sf::Vector2i> findPath(Config& config);
 		static void hardReset(std::vector<sf::Vector2i>& obstacles);
 		static void softReset(std::vector<sf::Vector2i>& obstacles);
 		static void update(sf::Vector2i v);
-		static void setTo(sf::Vector2i t);
+		static void setTo(sf::Vector2i t, Config& config);
 		static void setFrom(sf::Vector2i f);
 		static float manhattan(const sf::Vector2i& v1, const sf::Vector2i& v2);
 		static float getWeight(int i, int j);

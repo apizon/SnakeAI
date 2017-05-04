@@ -127,7 +127,7 @@ void Snake::die() {
 	dead = true;
 }
 
-void Snake::display(RenderWindow& win) {
+void Snake::display(RenderWindow& win, Config& config) {
 	sprite.setPosition((float)pos[0].x * S_SIZE + S_SIZE / 2, (float)pos[0].y * S_SIZE + S_SIZE / 2);
 	sprite.setTextureRect(IntRect(0, 0, T_SIZE, T_SIZE));
 
@@ -191,7 +191,7 @@ void Snake::display(RenderWindow& win) {
 	sprite.setTextureRect(IntRect(3*T_SIZE, 0, T_SIZE, T_SIZE));
 	win.draw(sprite);
 
-	if (DISPLAY_PATH) {
+	if (config.isDisplayPathOn()) {
 		RectangleShape rect;
 		rect.setFillColor(Color(color.r, color.g, color.b, 32));
 		rect.setSize(Vector2f(S_SIZE, S_SIZE));

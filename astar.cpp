@@ -27,7 +27,7 @@ void Astar::init() {
 	}
 }
 
-std::vector<Vector2i> Astar::findPath() {
+std::vector<Vector2i> Astar::findPath(Config& config) {
 	for (int i = 0; i < G_WIDTH; i++) {
 		for (int j = 0; j < G_HEIGHT; j++) {
 			if (graph[i][j].getWeight() == WEIGHT_REF)
@@ -55,7 +55,7 @@ std::vector<Vector2i> Astar::findPath() {
 		std::vector<Node*> nb = current->getNeighbors();
 		for (auto n : nb) {
 			if (!n->isVisited()) {
-				if(DISPLAY_COST)
+				if(config.isDisplayCostOn())
 					n->setCost(n->getEstimatedCost(), current->getCostSoFar() + 1 + n->getWeight() / WEIGHT_REF);
 				else
 					n->setCost(manhattan(Vector2i(n->getVal().x, n->getVal().y), to), current->getCostSoFar() + 1 + n->getWeight() / WEIGHT_REF);
@@ -126,9 +126,9 @@ void Astar::update(Vector2i v) {
 }
 
 
-void Astar::setTo(Vector2i t) {
+void Astar::setTo(Vector2i t, Config& config) {
 	to = t;
-	if (DISPLAY_COST) {
+	if (config.isDisplayCostOn()) {
 		for (int i = 0; i < G_WIDTH; i++) {
 			for (int j = 0; j < G_HEIGHT; j++) {
 				graph[i][j].setCost(manhattan(Vector2i(i, j), to), 0);

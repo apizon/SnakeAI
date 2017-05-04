@@ -16,79 +16,58 @@ Game::Game() {
 	for (int i = 0; i < NB_APPLE; i++) {
 		apple[i].spawn(obstacles, apple);
 	}
-	Astar::setTo(apple[0].getPosition());
+	Astar::setTo(apple[0].getPosition(), config);
 }
 
 void Game::play(RenderWindow& win) {
+	win.setFramerateLimit(config.getFPS());
 
-	Event event;
 	while (win.isOpen()) {
-		while (win.pollEvent(event)) {
-			if (event.type == Event::Closed)
-				win.close();
-			else if (event.type == Event::MouseWheelScrolled) {
-				gui.scroll(Mouse::getPosition(win), (int)event.mouseWheelScroll.delta);
-			}
-			else if (event.type == Event::KeyPressed) {
-				if (event.key.code == Keyboard::Escape)
-					win.close();
-				else if (event.key.code == Keyboard::Space)
-					pause(win);
-			}
-		}
+		handleEvents(win);
 
-		/*if (Keyboard::isKeyPressed(Keyboard::Left))
-			snek[0].move(LEFT);
-		else if (Keyboard::isKeyPressed(Keyboard::Right))
-			snek[0].move(RIGHT);
-		else if (Keyboard::isKeyPressed(Keyboard::Up))
-			snek[0].move(UP);
-		else if (Keyboard::isKeyPressed(Keyboard::Down))
-			snek[0].move(DOWN);
-		else
-			snek[0].move(NONE);*/
+		if (config.isRunning()) {
+			if (config.isWeightBFSOn())
+				Astar::hardReset(obstacles);
+			else
+				Astar::softReset(obstacles);
 
-		if (WEIGHT_BFS)
-			Astar::hardReset(obstacles);
-		else
-			Astar::softReset(obstacles);
+			generateObstacles();
+			for (int i = 0; i < NB_PLAYER; i++) {
+				if (!snek[i].isDead()) {
+					Astar::setFrom(snek[i].getHeadPosition());
 
-		generateObstacles();
-		for (int i = 0; i < NB_PLAYER; i++) {
-			if (!snek[i].isDead()) {
-				Astar::setFrom(snek[i].getHeadPosition());
-				
-				if (NB_APPLE == 1) {
-					snek[i].setPath(Astar::findPath());
-				}
-				else {
-					snek[i].clearPath();
-					std::vector<Vector2i> path;
-					for (int j = 0; j < NB_APPLE; j++) {
-						Astar::setTo(apple[j].getPosition());
-						path = Astar::findPath();
-						if (!snek[i].hasPath() || snek[i].getPathSize() >= path.size())
-							snek[i].setPath(path);
+					if (NB_APPLE == 1) {
+						snek[i].setPath(Astar::findPath(config));
+					}
+					else {
+						snek[i].clearPath();
+						std::vector<Vector2i> path;
+						for (int j = 0; j < NB_APPLE; j++) {
+							Astar::setTo(apple[j].getPosition(), config);
+							path = Astar::findPath(config);
+							if (!snek[i].hasPath() || snek[i].getPathSize() >= path.size())
+								snek[i].setPath(path);
+						}
+					}
+
+					if (!snek[i].followPath())
+						stall(snek[i]);
+
+					obstacles.push_back(snek[i].getHeadPosition());
+					if (collide(snek[i])) {
+						generateObstacles();
+						snakeAlive--;
+						if (snakeAlive == 0)
+							return;
+					}
+					else {
+						Astar::update(snek[i].getHeadPosition());
 					}
 				}
-				
-				if (!snek[i].followPath())
-					stall(snek[i]);
-
-				obstacles.push_back(snek[i].getHeadPosition());
-				if (collide(snek[i])) {
-					generateObstacles();
-					snakeAlive--;
-					if (snakeAlive == 0)
-						return;
-				}
-				else {
-					Astar::update(snek[i].getHeadPosition());
-				}
 			}
 		}
 
-		gui.display(win, snek, apple);
+		gui.display(win, snek, apple, config);
 	}
 }
 
@@ -104,7 +83,7 @@ bool Game::collide(Snake& s) {
 				s.eat();
 				apple[i].spawn(obstacles, apple);
 				if (NB_APPLE == 1)
-					Astar::setTo(apple[0].getPosition());
+					Astar::setTo(apple[0].getPosition(), config);
 			}
 		}
 	}
@@ -155,18 +134,50 @@ void Game::gameOver(sf::RenderWindow& win) {
 	}
 }
 
-void Game::pause(sf::RenderWindow &win) {
+void Game::handleEvents(sf::RenderWindow& win) {
 	Event event;
-	while (win.isOpen()) {
-		while (win.pollEvent(event)) {
-			if (event.type == Event::Closed)
+	while (win.pollEvent(event)) {
+		if (event.type == Event::Closed)
+			win.close();
+		else if (event.type == Event::MouseWheelScrolled) {
+			gui.scroll(Mouse::getPosition(win), (int)event.mouseWheelScroll.delta);
+		}
+		else if (event.type == Event::KeyPressed) {
+			if (event.key.code == Keyboard::Escape)
 				win.close();
-			else if (event.type == Event::KeyPressed) {
-				if (event.key.code == Keyboard::Escape)
-					win.close();
-				else if (event.key.code == Keyboard::Space)
-					return;
+			else if (event.key.code == Keyboard::Space)
+				config.togglePause();
+			else if (event.key.code == Keyboard::Add) {
+				config.changeFPS(1);
+				win.setFramerateLimit(config.getFPS());
 			}
+			else if (event.key.code == Keyboard::Subtract) {
+				config.changeFPS(-1);
+				win.setFramerateLimit(config.getFPS());
+			}
+			else if (event.key.code == Keyboard::Multiply) {
+				config.toggleFPSCap();
+				win.setFramerateLimit(config.getFPS());
+			}
+			else if (event.key.code == Keyboard::Numpad0)
+				config.toggleWeightBFS();
+			else if (event.key.code == Keyboard::Numpad1)
+				config.toggleDisplayCost();
+			else if (event.key.code == Keyboard::Numpad2)
+				config.toggleDisplayWeight();
+			else if (event.key.code == Keyboard::Numpad3)
+				config.toggleDisplayPath();
 		}
 	}
+
+	/*if (Keyboard::isKeyPressed(Keyboard::Left))
+		snek[0].move(LEFT);
+	else if (Keyboard::isKeyPressed(Keyboard::Right))
+		snek[0].move(RIGHT);
+	else if (Keyboard::isKeyPressed(Keyboard::Up))
+		snek[0].move(UP);
+	else if (Keyboard::isKeyPressed(Keyboard::Down))
+		snek[0].move(DOWN);
+	else
+		snek[0].move(NONE);*/
 }

@@ -5,6 +5,7 @@
 #include "define.h"
 #include "snake.h"
 #include "apple.h"
+#include "config.h"
 
 class Gui {
 	private:
@@ -21,7 +22,7 @@ class Gui {
 		void scroll(sf::Vector2i& mousePos, int i);
 		void scrollGameOver(sf::Vector2i& mousePos, int i);
 		void sortByScore(Snake snek[NB_PLAYER]);
-		void display(sf::RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE]);
+		void display(sf::RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE], Config& config);
 		void displayGameOver(sf::RenderWindow& win, Snake snek[NB_PLAYER]);
 };
 
