@@ -16,7 +16,7 @@ Snake::Snake() {
 	if (NB_PLAYER == 1)
 		color = Color::White;
 	else
-		color = Color(rand() % 256, rand() % 256, rand() % 256, 255);
+		color = Color(32 + rand() % 224, 32 + rand() % 224, 32 + rand() % 224, 255);
 	texture.loadFromFile(T_SNAKE);
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 0, T_SIZE, T_SIZE));

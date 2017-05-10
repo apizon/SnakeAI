@@ -145,27 +145,27 @@ void Game::handleEvents(sf::RenderWindow& win) {
 		else if (event.type == Event::KeyPressed) {
 			if (event.key.code == Keyboard::Escape)
 				win.close();
-			else if (event.key.code == Keyboard::Space)
+			else if (event.key.code == K_PAUSE)
 				config.togglePause();
-			else if (event.key.code == Keyboard::Add) {
+			else if (event.key.code == K_UP_FPS) {
 				config.changeFPS(1);
 				win.setFramerateLimit(config.getFPS());
 			}
-			else if (event.key.code == Keyboard::Subtract) {
+			else if (event.key.code == K_DOWN_FPS) {
 				config.changeFPS(-1);
 				win.setFramerateLimit(config.getFPS());
 			}
-			else if (event.key.code == Keyboard::Multiply) {
+			else if (event.key.code == K_FPS_CAP) {
 				config.toggleFPSCap();
 				win.setFramerateLimit(config.getFPS());
 			}
-			else if (event.key.code == Keyboard::Numpad0)
+			else if (event.key.code == K_TOGGLE_BFS)
 				config.toggleWeightBFS();
-			else if (event.key.code == Keyboard::Numpad1)
+			else if (event.key.code == K_SHOW_COST)
 				config.toggleDisplayCost();
-			else if (event.key.code == Keyboard::Numpad2)
+			else if (event.key.code == K_SHOW_WEIGHT)
 				config.toggleDisplayWeight();
-			else if (event.key.code == Keyboard::Numpad3)
+			else if (event.key.code == K_SHOW_PATH)
 				config.toggleDisplayPath();
 		}
 	}

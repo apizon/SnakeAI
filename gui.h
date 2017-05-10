@@ -11,7 +11,7 @@ class Gui {
 	private:
 		int scrollVal, scrollGameOverVal;
 		std::multimap<int, int> scoreMap;
-		sf::Font font;
+		sf::Font fontTitle, fontScore;
 		sf::RectangleShape vert_bar, horiz_bar, black_back;
 		sf::Text title_score, score;
 		sf::RectangleShape game_over_bar, game_over_black_back;

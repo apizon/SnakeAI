@@ -21,16 +21,17 @@ Gui::Gui() {
 	black_back.setFillColor(Color::Black);
 	black_back.setPosition(G_WIDTH * S_SIZE, 0);
 
-	font.loadFromFile(FONT);
+	fontTitle.loadFromFile(FONT_TITLE);
+	fontScore.loadFromFile(FONT_SCORE);
 
 	title_score.setString("SCORE");
-	title_score.setFont(font);
+	title_score.setFont(fontTitle);
 	title_score.setCharacterSize(W_HEIGHT / 8);
 	title_score.setOutlineColor(Color::White);
-	title_score.setPosition(7 * W_WIDTH / 8 - title_score.getLocalBounds().width / 2, 0);
+	title_score.setPosition(7 * W_WIDTH / 8 - title_score.getLocalBounds().width / 2, - W_HEIGHT / 60);
 
 	score.setString("P00 : 000");
-	score.setFont(font);
+	score.setFont(fontScore);
 	score.setCharacterSize(W_HEIGHT / 10);
 	score.setPosition((float)(7 * W_WIDTH / 8 - score.getLocalBounds().width / 2), 0);
 
@@ -44,13 +45,13 @@ Gui::Gui() {
 	game_over_black_back.setPosition(0, 0);
 
 	game_over.setString("GAME OVER");
-	game_over.setFont(font);
+	game_over.setFont(fontTitle);
 	game_over.setCharacterSize(W_HEIGHT / 4);
 	game_over.setOutlineColor(Color::White);
-	game_over.setPosition(W_WIDTH / 2 - game_over.getLocalBounds().width / 2, 0);
+	game_over.setPosition(W_WIDTH / 2 - game_over.getLocalBounds().width / 2, - W_HEIGHT / 25);
 
 	game_over_score.setString("Player 000 : 000");
-	game_over_score.setFont(font);
+	game_over_score.setFont(fontScore);
 	game_over_score.setCharacterSize(W_HEIGHT / 8);
 	game_over_score.setPosition((float)(W_WIDTH / 2 - game_over_score.getLocalBounds().width / 2), 0);
 }

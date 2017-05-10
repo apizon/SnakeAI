@@ -5,7 +5,7 @@ Config::Config() {
 	displayWeight = false;
 	displayCost = false;
 	displayPath = false;
-	pause = false;
+	pause = true;
 	fpsCap = true;
 	fps = 30;
 }
