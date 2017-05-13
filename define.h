@@ -1,13 +1,13 @@
 //Window config
 #define W_WIDTH			W_HEIGHT*16/9
-#define W_HEIGHT		900
+#define W_HEIGHT		768
 #define S_SIZE			16
 	
 //Game config
 #define G_WIDTH			(3*W_WIDTH/(4*S_SIZE))
 #define G_HEIGHT		(W_HEIGHT/S_SIZE)
 #define SEED			time(NULL)
-#define NB_PLAYER		50
+#define NB_PLAYER		1
 #define NB_APPLE		1
 #define WEIGHT_REF		(G_WIDTH+G_HEIGHT)
 
