@@ -1,6 +1,6 @@
 # Snake AI
 
-Project for the 3rd year AI course at INSA Rennes
+Project for the 3rd year AI course at INSA Rennes  
 Pathfinding on the game Snake using A* algorithm
 
 ## Controls
