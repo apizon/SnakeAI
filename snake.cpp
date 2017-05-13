@@ -15,6 +15,7 @@ Snake::Snake() {
 
 	if (NB_PLAYER == 1)
 		color = Color::White;
+	// Random color for visual purposes
 	else
 		color = Color(32 + rand() % 224, 32 + rand() % 224, 32 + rand() % 224, 255);
 	texture.loadFromFile(T_SNAKE);
@@ -36,6 +37,16 @@ Snake::Snake(Snake& s) {
 }
 
 void Snake::spawn() {
+	// Random position and random direction, same as with the apple, trial and error until
+	// we get a valid position
+	// Not optimized but we only do it once at the beginning of the game anyway
+
+	// I don't check for other snakes so sometimes they will spawn at the same place and one
+	// of them will die instantly which is sad but anyway it's not a big difference between
+	// having 50 snakes or having 45
+	// Also sometimes the head are at different places but the body intertwin, which is why
+	// most of the time they appear like that at the beginning but it fix itself once they
+	// start to move and don't happen again
 	do {
 		pos[0].x = rand() % G_WIDTH;
 		pos[0].y = rand() % G_HEIGHT;
@@ -59,6 +70,12 @@ void Snake::spawn() {
 	}
 }
 
+// Just change the first element of the vector to a new position and update all the others
+// to the values of the one before it
+// The #define are used to make it easier to read and to calculate
+// If the direction is the opposite of the current direction, we just keep going with the
+// current one as the snake can't go in reverse
+// NONE = current direction
 void Snake::move(int dir) {
 	if (dir == NONE || dir == -direction)
 		dir = direction;
@@ -85,6 +102,9 @@ void Snake::move(int dir) {
 	}
 }
 
+// We go to the first last element of the path vector and remove it from the vector
+// If it's not a valid position (i.e. if it's more than one distance away from the snake's head)
+// we clear the path and just use current direction
 bool Snake::followPath() {
 	if (hasPath()) {
 		Vector2i dest = path.at(path.size() - 1) - pos[0];
@@ -127,6 +147,9 @@ void Snake::die() {
 	dead = true;
 }
 
+// Same as in GUI, ugly calculations for nice visuals, not worth reading
+// Lots of ifs to check the rotation of the sprites, because once again i was
+// experimenting with SFML and the possibility to cut images in smaller part etc.
 void Snake::display(RenderWindow& win, Config& config) {
 	sprite.setPosition((float)pos[0].x * S_SIZE + S_SIZE / 2, (float)pos[0].y * S_SIZE + S_SIZE / 2);
 	sprite.setTextureRect(IntRect(0, 0, T_SIZE, T_SIZE));

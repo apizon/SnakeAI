@@ -8,27 +8,27 @@
 class Snake {
 	private:
 		int length;
-		int direction;
+		int direction;					// Direction of the head
 		int score;
 		bool dead;
-		std::vector<sf::Vector2i> pos;
-		std::vector<sf::Vector2i> path;
+		std::vector<sf::Vector2i> pos;	// The snake is just stored as a list of (x, y)
+		std::vector<sf::Vector2i> path; // Same for the path
 		sf::Texture texture;
 		sf::Sprite sprite;
-		sf::Color color;
+		sf::Color color;				// Original image is white but we can color it thanks to SFML
 		
 	public:
 		Snake();
 		Snake(Snake& s);
-		void spawn();
-		void move(int dir);
-		bool followPath();
+		void spawn();											// Random positionning
+		void move(int dir);										// Move in said direction
+		bool followPath();										// Move according to the path
 		void setPath(const std::vector<sf::Vector2i>& p);
-		void clearPath();
-		void eat();
+		void clearPath();										// Empty path
+		void eat();												// Grow and gain score
 		void die();
 		void display(sf::RenderWindow& win, Config& config);
-		bool isOutOfBounds() const;
+		bool isOutOfBounds() const;								// Basic check to see if the snake hit a side wall
 		bool hasPath() const;
 		int getScore() const;
 		bool isDead() const;

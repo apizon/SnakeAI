@@ -7,6 +7,8 @@
 #include "apple.h"
 #include "config.h"
 
+// Used to display scores and such, not optimized at all and contain 
+// some ugly calculations but it doesn't really impact performance
 class Gui {
 	private:
 		int scrollVal, scrollGameOverVal;

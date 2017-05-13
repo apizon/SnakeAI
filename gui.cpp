@@ -4,6 +4,15 @@
 
 using namespace sf;
 
+// /!\ Ugly calculations down below, scroll at your own risks
+// Not really worth reading through, the AI was pretty good at the point i made
+// this and i was bored some week-end and wanted to try a few things with SFML
+// and mostly make it look good for the final presentation
+
+// All the "W_WIDTH / X" are made so the game scales nicely on smaller 
+// windows, it's better to use with a 16:9 resolution though, otherwise 
+// the scores are all messed up
+
 Gui::Gui() {
 	scrollVal = 0;
 	scrollGameOverVal = 0;

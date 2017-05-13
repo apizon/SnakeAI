@@ -4,15 +4,17 @@
 #include "SFML/Graphics.hpp"
 #include "define.h"
 
+// To change some options without having to restart
+// and change the #define all the time
 class Config {
 	private:
-		bool weightBFS;
-		bool displayWeight;
-		bool displayCost;
-		bool displayPath;
+		bool weightBFS;			// Toggle between hardReset() and softReset()
+		bool displayWeight;		// Display heatmap around snake
+		bool displayCost;		// Display heatmap around apple
+		bool displayPath;		// Display snake's path to apple
 		bool pause;
-		bool fpsCap;
-		int fps;
+		bool fpsCap;			// Toggle fps cap
+		int fps;				// Fps cap value
 
 	public:
 		Config();
