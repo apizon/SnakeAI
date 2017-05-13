@@ -1,10 +1,12 @@
-# Snake AI
+# Snake AI  
 
 Project for the 3rd year AI course at INSA Rennes  
 Pathfinding on the game Snake using A* algorithm
 
-## Controls
+## Controls  
 
+- MouseLeft : Add obstacle
+- MouseRight: Remove obstacle
 - Space		: Toggle pause
 - Numpad1 	: Toggle display of manhattan distance to apple
 - Numpad2 	: Toggle display of heatmap around Snake

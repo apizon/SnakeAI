@@ -28,8 +28,10 @@
 #define UP				2
 
 
-// Keybinds 
+// Controlls 
 // Change as you will
+#define M_ADD_OBS		Mouse::Left
+#define M_DEL_OBS		Mouse::Right
 #define K_PAUSE			Keyboard::Space
 #define K_UP_FPS		Keyboard::Add
 #define K_DOWN_FPS		Keyboard::Subtract

@@ -17,6 +17,9 @@ Gui::Gui() {
 	scrollVal = 0;
 	scrollGameOverVal = 0;
 
+	obstacle.setSize(Vector2f(S_SIZE, S_SIZE));
+	obstacle.setFillColor(Color(128,128,128));
+
 	//Game in progress
 	vert_bar.setSize(Vector2f(1, W_HEIGHT));
 	vert_bar.setFillColor(Color::White);
@@ -91,7 +94,7 @@ void Gui::sortByScore(Snake snek[NB_PLAYER]) {
 	}
 }
 
-void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE], Config& config) {
+void Gui::display(RenderWindow& win, std::vector<sf::Vector2i> fixedO, Snake snek[NB_PLAYER], Apple apple[NB_APPLE], Config& config) {
 	sortByScore(snek);
 
 	win.clear();
@@ -112,6 +115,11 @@ void Gui::display(RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE
 				win.draw(rect);
 			}
 		}
+	}
+
+	for (auto o : fixedO) {
+		obstacle.setPosition(S_SIZE * o.x, S_SIZE * o.y);
+		win.draw(obstacle);
 	}
 
 	if (NB_PLAYER > 10) {

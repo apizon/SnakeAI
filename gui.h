@@ -12,6 +12,7 @@
 class Gui {
 	private:
 		int scrollVal, scrollGameOverVal;
+		sf::RectangleShape obstacle;
 		std::multimap<int, int> scoreMap;
 		sf::Font fontTitle, fontScore;
 		sf::RectangleShape vert_bar, horiz_bar, black_back;
@@ -24,7 +25,7 @@ class Gui {
 		void scroll(sf::Vector2i& mousePos, int i);
 		void scrollGameOver(sf::Vector2i& mousePos, int i);
 		void sortByScore(Snake snek[NB_PLAYER]);
-		void display(sf::RenderWindow& win, Snake snek[NB_PLAYER], Apple apple[NB_APPLE], Config& config);
+		void display(sf::RenderWindow& win, std::vector<sf::Vector2i> fixedO, Snake snek[NB_PLAYER], Apple apple[NB_APPLE], Config& config);
 		void displayGameOver(sf::RenderWindow& win, Snake snek[NB_PLAYER]);
 };
 

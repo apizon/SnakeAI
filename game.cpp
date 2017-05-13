@@ -81,7 +81,7 @@ void Game::play(RenderWindow& win) {
 			}
 		}
 
-		gui.display(win, snek, apple, config);
+		gui.display(win, fixedObstacles, snek, apple, config);
 	}
 }
 
@@ -128,8 +128,18 @@ void Game::stall(Snake& s) {
 		s.move(NONE);
 }
 
+void Game::addObstacle(Vector2i v) {
+	if (std::find(fixedObstacles.begin(), fixedObstacles.end(), v) == fixedObstacles.end())
+		fixedObstacles.push_back(v);
+}
+
+void Game::removeObstacle(Vector2i v) {
+	if(std::find(fixedObstacles.begin(), fixedObstacles.end(), v) != fixedObstacles.end())
+		fixedObstacles.erase(std::find(fixedObstacles.begin(), fixedObstacles.end(), v));
+}
+
 void Game::generateObstacles() {
-	obstacles.clear();
+	obstacles = fixedObstacles;
 	for (int i = 0; i < NB_PLAYER; i++) {
 		if (!snek[i].isDead()) {
 			std::vector<Vector2i> snekPos = snek[i].getPosition();
@@ -164,9 +174,8 @@ void Game::handleEvents(sf::RenderWindow& win) {
 	while (win.pollEvent(event)) {
 		if (event.type == Event::Closed)
 			win.close();
-		else if (event.type == Event::MouseWheelScrolled) {
+		else if (event.type == Event::MouseWheelScrolled)
 			gui.scroll(Mouse::getPosition(win), (int)event.mouseWheelScroll.delta);
-		}
 		else if (event.type == Event::KeyPressed) {
 			if (event.key.code == Keyboard::Escape)
 				win.close();
@@ -194,6 +203,11 @@ void Game::handleEvents(sf::RenderWindow& win) {
 				config.toggleDisplayPath();
 		}
 	}
+
+	if (Mouse::isButtonPressed(M_ADD_OBS))
+		addObstacle(Vector2i(Mouse::getPosition(win).x / S_SIZE, Mouse::getPosition(win).y / S_SIZE));
+	if (Mouse::isButtonPressed(M_DEL_OBS))
+		removeObstacle(Vector2i(Mouse::getPosition(win).x / S_SIZE, Mouse::getPosition(win).y / S_SIZE));
 
 	// Uncomment to enable human control of first snake
 	// (If enabled you have to change the main game loop so it ignore
