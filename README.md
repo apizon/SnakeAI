@@ -18,4 +18,5 @@ Supports multiple snakes and apples, as well as obstacles.
 - Substract	: Decrease FPS cap value
 
 https://www.youtube.com/watch?v=uQ03TnEssbM
+
 Video example featuring 50 snakes and 3 apples (it may seem like there are more because they appear and disappear very quickly).
