@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "config.h"
 
 Config::Config() {
@@ -7,7 +8,7 @@ Config::Config() {
 	displayPath = false;
 	pause = true;
 	fpsCap = true;
-	fps = 30;
+	fps = 60;
 }
 
 void Config::toggleWeightBFS() {

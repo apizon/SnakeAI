@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <iostream>
 #include "gui.h"
 #include "astar.h"

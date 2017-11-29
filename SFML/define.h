@@ -1,8 +1,8 @@
 // Window config
 // I recommand only changing the height and let the width adapt to it
 // otherwise the score display is all messed up
-#define W_WIDTH			(W_HEIGHT*16/9)
-#define W_HEIGHT		900
+#define W_WIDTH			1280
+#define W_HEIGHT		720
 // Sprite display size, change if you want bigger/smaller sprites
 // Don't touch to T_SIZE though
 #define S_SIZE			16

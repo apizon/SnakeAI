@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <SFML/Graphics.hpp>
 
 #include "define.h"
@@ -7,7 +8,7 @@
 using namespace sf;
 
 int main() {
-	RenderWindow win(VideoMode(W_WIDTH, W_HEIGHT), "Snake", Style::Fullscreen);
+	RenderWindow win(VideoMode(W_WIDTH, W_HEIGHT), "Snake", Style::Default);
 	win.setKeyRepeatEnabled(true);
 
 	srand(SEED);

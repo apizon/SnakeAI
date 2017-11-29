@@ -155,10 +155,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="apple.h" />
+    <ClInclude Include="astar.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="define.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="gui.h" />
+    <ClInclude Include="snake.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SFML.cpp" />
+    <ClCompile Include="apple.cpp" />
+    <ClCompile Include="astar.cpp" />
+    <ClCompile Include="config.cpp" />
+    <ClCompile Include="game.cpp" />
+    <ClCompile Include="gui.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="snake.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
